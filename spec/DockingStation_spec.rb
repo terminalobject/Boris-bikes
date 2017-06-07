@@ -4,6 +4,7 @@ describe DockingStation do
   it { is_expected.to respond_to(:release_bike) }
 
   it 'gets a bike' do
+    subject.dock(Bike.new)
     bike = subject.release_bike
       expect(bike).to be_a_kind_of(Bike)
       expect(bike).to be_working
@@ -22,4 +23,9 @@ describe DockingStation do
     expect(subject.bike).to eq bike
   end
 
+  describe '#release_bike' do
+    it 'raises an error when there are no bikes available' do
+      expect{subject.release_bike}.to raise_error("There are no more bikes available")
+    end
+  end
 end
