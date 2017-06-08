@@ -16,4 +16,19 @@ class DockingStation
     @bikes.last
   end
 
+  def full?
+    if @bikes.count >= 20
+      true
+    else 
+      false
+    end 
+  end 
+
+  def empty?
+    if @bikes.count >= 20
+      false
+    else 
+      true
+    end 
+  end 
 end
