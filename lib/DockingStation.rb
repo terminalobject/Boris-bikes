@@ -18,6 +18,12 @@ class DockingStation
     @bikes << bike
     @bikes.last
   end
+
+  def report_broken_bike(bike)
+    bike.break
+    dock(bike)
+  end
+
   private
   def full?
     @bikes.count >= DEFAULT_CAPACITY

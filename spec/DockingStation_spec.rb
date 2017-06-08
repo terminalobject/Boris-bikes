@@ -44,6 +44,17 @@ describe DockingStation do
     end
   end
 
+  describe '#report_broken_bike' do
+
+    it { is_expected.to respond_to(:report_broken_bike) }
+
+    it "changes a bike's status to broken" do
+      bike = Bike.new
+      subject.report_broken_bike(bike)
+      expect(bike).to_not be_working
+    end
+  end
+
   # describe '#full?' do
   #   it "tells if the docking station is full" do
 
