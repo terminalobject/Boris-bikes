@@ -1,18 +1,19 @@
 class DockingStation
-  attr_accessor :bike
+  attr_accessor :bikes
 
   def initialize
-    @bike = bike
+    @bikes = []
   end
 
   def release_bike
-    fail "There are no more bikes available" unless @bike
-    @bike
+    fail "There are no more bikes available" if @bikes.empty?
+    @bikes.pop
   end
 
   def dock(bike)
-    fail "The docking station is full" if @bike
-    @bike = bike
+    fail "The docking station is full" if @bikes.count >= 20
+    @bikes << bike
+    @bikes.last
   end
 
 end
