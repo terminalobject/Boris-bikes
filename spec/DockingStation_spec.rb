@@ -32,21 +32,22 @@ describe DockingStation do
 
   describe '#full?' do
     it "tells if the docking station is full" do
-      if subject.bikes.count >= 20
-        expect(subject.full?).to eq true
-      else 
-        expect(subject.full?).to eq false 
-      end 
-    end 
+
+      20.times { subject.dock(Bike.new) }
+      expect(subject).to be_full
+
+      20.times { subject.release_bike }
+      expect(subject).to_not be_full
+    end
   end
 
   describe '#empty?' do
-    it "tells if the docking station is empty" do 
-      if subject.bikes.count >= 20
-        expect(subject.empty?).to eq false
-      else 
-        expect(subject.empty?).to eq true
-      end 
-    end 
-  end 
+    it "tells if the docking station is empty" do
+      5.times { subject.dock(Bike.new) }
+      expect(subject).to_not be_empty
+
+      5.times { subject.release_bike }
+      expect(subject).to be_empty
+    end
+  end
 end
