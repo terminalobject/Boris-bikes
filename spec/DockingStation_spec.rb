@@ -17,34 +17,40 @@ describe DockingStation do
     end
   end
 
+let(:bike) {double :bike}
+
   describe '#release_bike' do
     it 'raises an error when there are no bikes available' do
       expect{subject.release_bike}.to raise_error("There are no more bikes available")
     end
     it 'does not release a broken bike' do
-        bike = Bike.new 
+        allow(bike).to receive(:working?).and_return(false)
+        allow(bike).to receive(:break)
+        allow(bike).to receive(:status).and_return("broken")
+        allow(bike).to receive(:report_broken_bike)
+ #Double here
         subject.report_broken_bike(bike)
         expect{subject.release_bike}.to raise_error("This bike is broken")
     end 
 
     it 'gets a bike' do
-      subject.dock(Bike.new)
+      allow(bike).to receive(:working?).and_return(true)
+      subject.dock(bike) #Double here
       bike = subject.release_bike
-        expect(bike).to be_a_kind_of(Bike)
         expect(bike).to be_working
     end
   end
 
   describe '#dock' do
     it 'raises an error when the docking station is full' do
-      DockingStation::DEFAULT_CAPACITY.times { subject.dock(Bike.new) }
-      expect{subject.dock Bike.new}.to raise_error("The docking station is full")
+      DockingStation::DEFAULT_CAPACITY.times { subject.dock(double(:bike)) } #Double here
+      expect{subject.dock double(:bike)}.to raise_error("The docking station is full") #and here
     end
 
     it { is_expected.to respond_to(:dock).with(1).argument }
 
     it 'docks a bike' do
-      bike = Bike.new
+      bike = double(:bike) #Double here
       expect(subject.dock(bike)).to eq subject.bikes.last
     end
   end
@@ -54,7 +60,8 @@ describe DockingStation do
     it { is_expected.to respond_to(:report_broken_bike) }
 
     it "changes a bike's status to broken" do
-      bike = Bike.new
+      allow(bike).to receive(:break) #Double here
+      allow(bike).to receive(:working?).and_return(false)
       subject.report_broken_bike(bike)
       expect(bike).to_not be_working
     end
@@ -63,7 +70,7 @@ describe DockingStation do
   # describe '#full?' do
   #   it "tells if the docking station is full" do
 
-  #     20.times { subject.dock(Bike.new) }
+  #     20.times { subject.dock(double(:bike)) }
   #     expect(subject).to be_full
 
   #     20.times { subject.release_bike }
@@ -73,7 +80,7 @@ describe DockingStation do
 
   # describe '#empty?' do
   #   it "tells if the docking station is empty" do
-  #     5.times { subject.dock(Bike.new) }
+  #     5.times { subject.dock(double(:bike)) }
   #     expect(subject).to_not be_empty
 
   #     5.times { subject.release_bike }
